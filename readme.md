@@ -1,0 +1,1 @@
+dont use the config file but replaced it with your keys because all are mine and are locked
