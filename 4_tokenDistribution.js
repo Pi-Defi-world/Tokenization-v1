@@ -1,22 +1,19 @@
 import StellarSdk from "@stellar/stellar-sdk";
 import config from "./config.json" assert { type: "json" };
-import type { Config } from "./types.js";
-
-const typedConfig = config as Config;
 
 const { 
   accounts: { issuer, distributor },
   network: { serverUrl, networkPassphrase },
   asset: { code: assetCode },
   trading: { sellAmount, sellPrice }
-} = typedConfig;
+} = config;
 
 // Destructure from default export
 const { Server, Asset, TransactionBuilder, Operation, Keypair } = StellarSdk;
 
 const server = new StellarSdk.Horizon.Server(serverUrl);
 
-const main = async (): Promise<void> => {
+const main = async () => {
   const distributorAccount = await server.loadAccount(distributor.publicKey);
 
   const breadAsset = new Asset(assetCode, issuer.publicKey);
@@ -44,6 +41,6 @@ const main = async (): Promise<void> => {
   console.log("✅ Token distribution completed!");
 };
 
-main().catch((e: any) => {
+main().catch((e) => {
   console.error("❌ Failed during token distribution:", e);
 });

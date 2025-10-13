@@ -1,5 +1,5 @@
 import StellarSdk from "@stellar/stellar-sdk";
-import config from "../config.json" assert { type: "json" };
+import config from "./config.json" assert { type: "json" };
 
 const { 
   accounts: { issuer },

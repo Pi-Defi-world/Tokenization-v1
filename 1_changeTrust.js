@@ -1,5 +1,5 @@
 import StellarSdk from "@stellar/stellar-sdk";
-import config from "../config.json" assert { type: "json" };
+import config from "./config.json" assert { type: "json" };
 
 const {
   accounts: { issuer, distributor },
@@ -20,10 +20,10 @@ const main = async () => {
 
   const distributorAccount = await server.loadAccount(distributor.publicKey);
 
-  const bbc = new Asset(assetCode, issuer.publicKey);
+  const MEME = new Asset(assetCode, issuer.publicKey);
 
   const changeTrustOpts = {
-    asset: bbc,
+    asset: MEME,
     limit: distributorTrustLimit
   };
 

@@ -1,9 +1,6 @@
-// 2_createAsset.ts
+// 2_createAsset.js
 import StellarSdk from "@stellar/stellar-sdk";
 import config from "./config.json" assert { type: "json" };
-import type { Config } from "./types.js";
-
-const typedConfig = config as Config;
 
 const {
   accounts: { issuer, distributor },
@@ -11,7 +8,7 @@ const {
   asset: { code: assetCode },
   issuance: { initialAmount },
   transactions: { timeout }
-} = typedConfig;
+} = config;
 
 const server = new StellarSdk.Horizon.Server(serverUrl);
 
@@ -21,7 +18,7 @@ const distributorKeys = StellarSdk.Keypair.fromSecret(distributor.secret);
 // 🪙 Define your custom token
 const asset = new StellarSdk.Asset(assetCode, issuingKeys.publicKey());
 
-(async (): Promise<void> => {
+(async () => {
   try {
     // Load issuer account
     const account = await server.loadAccount(issuingKeys.publicKey());
@@ -41,18 +38,19 @@ const asset = new StellarSdk.Asset(assetCode, issuingKeys.publicKey());
       .setTimeout(timeout)
       .build();
 
-    // Sign with Issuer's secret
+    // Sign with Issuer’s secret
     tx.sign(issuingKeys);
 
     // Submit to Pi Testnet
     const res = await server.submitTransaction(tx);
     console.log("✅ Asset issued successfully:", res.hash);
 
-  } catch (e: any) {
-    if (e.response && e.response.data) {
-      console.error("❌ Failed:", JSON.stringify(e.response.data, null, 2));
-    } else {
-      console.error("❌ Failed:", e.message || e);
-    }
+  } catch (e) {
+  if (e.response && e.response.data) {
+    console.error("❌ Failed:", JSON.stringify(e.response.data, null, 2));
+  } else {
+    console.error("❌ Failed:", e.message || e);
   }
+}
+
 })();
